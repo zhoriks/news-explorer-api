@@ -9,23 +9,15 @@ const BadReques = require('../errors/bad-reques');
 
 
 module.exports.addUser = (req, res, next) => {
+  const { name, email } = req.body;
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
-      email: req.body.email,
-      password: hash,
-      name: req.body.name,
+      name, email, password: hash,
     }))
-    .then((user) => {
-      if (!user) {
-        throw new BadReques('Ошибка создания пользователя');
-      }
-      res.status(201).send({
-        _id: user._id,
-        email: user.email,
-        name: user.name,
-      });
-    })
-    .catch(next);
+    .then((user) => res.status(201).send({ name: user.name, email: user.email, id: user._id }))
+    .catch(() => {
+      next(new BadRequest('Пользователь с такими данными уже существует'));
+    });
 };
 
 module.exports.login = (req, res, next) => {
@@ -44,12 +36,12 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getUser = (req, res, next) => {
-  User.findById(req.user.id)
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       } else {
-        res.send({ user });
+        res.send({ name: user.name, email: user.email  });
       }
     })
     .catch(next);
