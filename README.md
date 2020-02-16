@@ -4,4 +4,4 @@
 >`84.201.181.76`
 
 ## Домен
->`https://www.news-explorer.online`
+>`https://www.api.news-explorer.online`
