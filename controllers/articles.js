@@ -1,5 +1,7 @@
 const Article = require('../models/article');
+
 const NotFoundError = require('../errors/not-found-err');
+const ForbiddenError = require('../errors/not-found-err');
 
 module.exports.addArticle = (req, res, next) => {
   const {
@@ -19,18 +21,22 @@ module.exports.getArticles = (req, res, next) => {
 };
 
 module.exports.deleteArticle = (req, res, next) => {
-  Article.findById(req.params.id)
+  const owner = req.user._id;
+  const { articleId } = req.params;
+  Article.findById(articleId)
     .then((article) => {
-      if (!article) {
-        throw new NotFoundError('Нет такой статьи');
-      }
-      if (req.user._id === article.owner.toString()) {
-        Article.findByIdAndRemove(req.params.id)
-          .then(() => res.send({ message: 'Удалено' }));
+      if (article) {
+        if (owner === article.owner.toString()) {
+          Article.findByIdAndRemove(articleId)
+            .then(() => {
+              res.send({ message: 'Статья удалена' });
+            })
+            .catch(next);
+        } else {
+          throw new ForbiddenError('Недостаточно прав');
+        }
       } else {
-        const err = new Error('Нет прав');
-        err.statusCode = 403;
-        next(err);
+        throw new NotFoundError('Такой статьи не существует');
       }
     })
     .catch(next);

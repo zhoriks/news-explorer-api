@@ -5,7 +5,7 @@ const User = require('../models/user');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFoundError = require('../errors/not-found-err');
 const AuthorisationError = require('../errors/authorisation-error');
-const BadReques = require('../errors/bad-reques');
+const BadRequest = require('../errors/bad-reques');
 
 
 module.exports.addUser = (req, res, next) => {
@@ -41,7 +41,7 @@ module.exports.getUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       } else {
-        res.send({ name: user.name, email: user.email  });
+        res.send({ name: user.name, email: user.email });
       }
     })
     .catch(next);
