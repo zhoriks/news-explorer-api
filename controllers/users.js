@@ -25,11 +25,13 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       if (!user) {
         throw new AuthorisationError('Ошибка авторизации');
       }
-      res.send({
-        token: jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }),
+      res.cookie('jwt', token, {
+        maxAge: 1000 * 60 * 60 * 7,
+        httpOnly: true,
       });
     })
     .catch(next);
