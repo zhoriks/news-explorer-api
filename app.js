@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const cors = require('cors');
 
 const { appPort, mongoUri } = require('./config');
 const NotFoundError = require('./errors/not-found-err');
@@ -27,7 +26,23 @@ mongoose.connect(mongoUri, {
 
 const app = express();
 
-app.use(cors());
+const allowedCors = [
+  'https://www.news-explorer.online',
+  'http://www.news-explorer.online',
+  'https://news-explorer.online',
+  'https://news-explorer.online',
+  'http://localhost:8080',
+];
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  next();
+});
+
 app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
