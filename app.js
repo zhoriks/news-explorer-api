@@ -32,6 +32,7 @@ const allowedCors = [
   'https://news-explorer.online',
   'https://news-explorer.online',
   'http://localhost:8080',
+  'localhost:8080',
 ];
 
 app.use((req, res, next) => {
