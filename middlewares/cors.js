@@ -4,7 +4,7 @@ const cors = (req, res, next) => {
   if (req.headers.origin && allowedDomains.includes(req.headers.origin)) {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
   } else {
-    res.header('Access-Control-Allow-Origin', 'https://praktikum-diploma.ru');
+    res.header('Access-Control-Allow-Origin', 'https://news-explorer.online');
   }
 
   res.header('Access-Control-Allow-Credentials', true);
