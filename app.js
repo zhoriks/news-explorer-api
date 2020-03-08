@@ -28,7 +28,10 @@ mongoose.connect(mongoUri, {
 
 const app = express();
 
-app.use(cors);
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 app.use(rateLimiter);
 app.use(helmet());
 app.use(cookieParser());
