@@ -1,27 +1,24 @@
 const jwt = require('jsonwebtoken');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
-const AuthorisationError = require('../errors/authorisation-error');
+const { jwtSecret } = require('../config');
+const UnauthorizedError = require('../errors/unauthorized-err');
+const { tokenNotFoundMessage, unauthorizedMessage } = require('../shared/messages');
 
-const extractBearerToken = (header) => header.replace('Bearer ', '');
-
-// eslint-disable-next-line consistent-return
-module.exports = (req, res, next) => {
-  const { authorization } = req.headers;
-
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new AuthorisationError('Необходима авторизация');
-  }
-
-  const token = extractBearerToken(authorization);
-  let payload;
+const getAuth = (req, res, next) => {
+  const { jwt: token } = req.cookies;
 
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
-  } catch (err) {
-    throw new AuthorisationError('Необходима авторизация');
-  }
-  req.user = payload;
+    if (!token) {
+      throw new UnauthorizedError(tokenNotFoundMessage);
+    }
 
-  next();
+    req.user = jwt.verify(token, jwtSecret);
+    next();
+  } catch (err) {
+    throw new UnauthorizedError(unauthorizedMessage);
+  }
+};
+
+module.exports = {
+  getAuth,
 };

@@ -1,13 +1,11 @@
 const router = require('express').Router();
-const routerArticles = require('./article');
-const routerUsers = require('./user');
-const NotFoundError = require('../errors/not-found-err');
 
+const authRoutes = require('./auth-routes');
+const userRoutes = require('./user-routes');
+const articleRoutes = require('./article-routes');
 
-router.use('/', routerArticles);
-router.use('/', routerUsers);
-router.use('/', () => {
-  throw new NotFoundError('Ресурс не найден');
-});
+router.use(authRoutes);
+router.use(userRoutes);
+router.use(articleRoutes);
 
 module.exports = router;
