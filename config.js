@@ -4,5 +4,11 @@ module.exports = {
   jwtSecret: isDev ? 'big-secret-for-a-small-company' : process.env.JWT_SECRET,
   appPort: isDev ? 3000 : process.env.PORT,
   mongoUri: isDev ? 'mongodb://localhost:27017/newsdb' : process.env.MONGO_URI,
-  allowedDomains: ['http://localhost:8080', 'http://news-explorer.online'],
+  allowedDomains: [
+    'https://www.news-explorer.online',
+    'http://www.news-explorer.online',
+    'https://news-explorer.online',
+    'https://news-explorer.online',
+    'http://localhost:8080',
+  ],
 };
