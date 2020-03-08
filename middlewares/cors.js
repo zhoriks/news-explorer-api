@@ -8,10 +8,8 @@ const allowedDomains = [
 
 
 const cors = (req, res, next) => {
-  const { origin } = req.headers;
-  if (allowedDomains.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
   next();
 };
