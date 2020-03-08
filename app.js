@@ -12,7 +12,6 @@ const { appPort } = require('./config');
 const NotFoundError = require('./errors/not-found-err');
 const errorHandler = require('./middlewares/error-handler');
 const rateLimiter = require('./middlewares/rate-limiter');
-const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
 const { notFoundMessage } = require('./shared/messages');
