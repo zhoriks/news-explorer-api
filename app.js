@@ -6,12 +6,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const cors = require('cors');
 
 const { appPort, mongoUri } = require('./config');
 const NotFoundError = require('./errors/not-found-err');
 const errorHandler = require('./middlewares/error-handler');
-const rateLimiter = require('./middlewares/rate-limiter');
-const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
 const { notFoundMessage } = require('./shared/messages');
@@ -28,6 +27,7 @@ mongoose.connect(mongoUri, {
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
