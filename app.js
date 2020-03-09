@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 
-const { appPort } = require('./config');
 const NotFoundError = require('./errors/not-found-err');
 const errorHandler = require('./middlewares/error-handler');
 const rateLimiter = require('./middlewares/rate-limiter');
@@ -15,6 +14,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
 const { notFoundMessage } = require('./shared/messages');
 const cors = require('./middlewares/cors');
+
+const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(cors);
@@ -34,6 +35,4 @@ app.use(() => {
 app.use(errors());
 app.use(errorHandler);
 
-app.listen(appPort, () => {
-  console.log(`App: OK on port ${appPort}`);
-});
+app.listen(PORT, () => {});
