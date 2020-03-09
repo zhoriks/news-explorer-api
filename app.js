@@ -18,7 +18,12 @@ const { notFoundMessage } = require('./shared/messages');
 
 const app = express();
 
-app.options('*', cors());
+const corsOptions = {
+  origin: 'http://localhost:8080/',
+  optionsSuccessStatus: 200,
+};
+
+
 app.use(rateLimiter);
 app.use(helmet());
 app.use(cookieParser());
@@ -26,7 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
-app.use('/', routes);
+app.use('/', cors(corsOptions), routes);
 app.use(errorLogger);
 app.use(() => {
   throw new NotFoundError(notFoundMessage);
