@@ -14,14 +14,11 @@ const rateLimiter = require('./middlewares/rate-limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
 const { notFoundMessage } = require('./shared/messages');
+const cors = require('./middlewares/cors');
 
 const app = express();
+app.use(cors);
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
 app.use(rateLimiter);
 app.use(helmet());
 app.use(cookieParser());
