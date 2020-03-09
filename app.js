@@ -6,7 +6,6 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const cors = require('cors');
 
 const { appPort } = require('./config');
 const NotFoundError = require('./errors/not-found-err');
@@ -17,12 +16,6 @@ const routes = require('./routes');
 const { notFoundMessage } = require('./shared/messages');
 
 const app = express();
-
-app.use(cors(({
-  credentials: true,
-  origin: true,
-})));
-
 
 app.use(rateLimiter);
 app.use(helmet());
