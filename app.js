@@ -10,12 +10,19 @@ const { errors } = require('celebrate');
 const { appPort } = require('./config');
 const NotFoundError = require('./errors/not-found-err');
 const errorHandler = require('./middlewares/error-handler');
+const rateLimiter = require('./middlewares/rate-limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
 const { notFoundMessage } = require('./shared/messages');
 
 const app = express();
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+app.use(rateLimiter);
 app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
