@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { jwtSecret } = require('../config');
+const { NODE_ENV, JWT_SECRET } = process.env;
 const UnauthorizedError = require('../errors/unauthorized-err');
 const { tokenNotFoundMessage, unauthorizedMessage } = require('../shared/messages');
 
@@ -12,7 +12,7 @@ const getAuth = (req, res, next) => {
       throw new UnauthorizedError(tokenNotFoundMessage);
     }
 
-    req.user = jwt.verify(token, jwtSecret);
+    req.user = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
     next();
   } catch (err) {
     throw new UnauthorizedError(unauthorizedMessage);
